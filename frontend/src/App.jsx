@@ -25,7 +25,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Default axios
-axios.defaults.baseURL = "http://localhost:4000";
+axios.defaults.baseURL = "ontheroad-travel-p6z1972bp-lukasilverio94.vercel.app";
 axios.defaults.withCredentials = true;
 
 function App() {
