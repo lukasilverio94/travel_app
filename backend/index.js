@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["https://ontheroad-travelapp-frontend.vercel.app/"],
+    origin: ["https://ontheroad-travelapp-frontend.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Authorization,Content-Type"],
     credentials: true,
