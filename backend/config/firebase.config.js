@@ -1,0 +1,15 @@
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: "ontheroad-b3c6d.firebaseapp.com",
+  projectId: "ontheroad-b3c6d",
+  storageBucket: "ontheroad-b3c6d.appspot.com",
+  messagingSenderId: "965467401655",
+  appId: "1:965467401655:web:5e516d4198ea2c61324c32",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+export default app;

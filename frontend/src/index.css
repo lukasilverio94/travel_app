@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-roboto;
+}
+#navbar-search ul li:not(:last-child) {
+  margin-bottom: 8px; /* Adjust the margin as needed */
+}
+
+#navbar-search ul li a.selected {
+  /* Add styles for the selected link */
+  font-weight: bold; /* Example: Make the font bold */
+  /* Add other styles as needed */
+}
