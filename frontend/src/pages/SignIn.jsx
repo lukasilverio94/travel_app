@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
 
   const submitLogIn = (e) => {
     e.preventDefault();
@@ -19,15 +20,14 @@ export default function SignIn() {
         .post("/user/login", data)
         .then((result) => {
           localStorage.setItem("token", result.data);
-          window.location.href = "/";
+          // Use history.push to navigate without reloading the page
+          history.push("/");
           toast.success("You are logged in");
         })
         .catch((error) => {
-          // Instead of setting the error state, trigger the toast notification
           toast.error(error.response.data);
         });
     } else {
-      // Instead of setting the error state, trigger the toast notification
       toast.error("Email and Password are required");
     }
   };
