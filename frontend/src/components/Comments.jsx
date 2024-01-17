@@ -8,7 +8,7 @@ export default function Comments({ post }) {
   const [comment, setComment] = useState({
     postId: post._id,
     commentText: "",
-    writer: "",
+    writer: JSON.parse(localStorage.getItem("user")).username,
   });
 
   const [refreshComments, setRefreshComments] = useState(false);
