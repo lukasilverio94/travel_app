@@ -12,7 +12,7 @@ const ShowPost = () => {
   const [post, setPost] = useState({});
   const [loading, setLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [newImage, setNewImage] = useState(null);
+  const [newImages, setNewImages] = useState(null);
   const [formatError, setFormatError] = useState(null);
   const { id } = useParams();
 
@@ -53,13 +53,28 @@ const ShowPost = () => {
 
   // Images upload
   const handleImageUpload = async (files) => {
-    const formData = new FormData();
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append("images", files[i]);
-    }
-
     try {
+      const storage = getStorage(app);
+      const imagePaths = [];
+
+      for (let i = 0; i < files.length; i++) {
+        const fileName = new Date().getTime() + files[i].name;
+        const storageRef = ref(storage, "images/" + fileName);
+        await uploadBytesResumable(storageRef, files[i], {
+          contentType: files[i].type,
+        });
+
+        // Get the public URL of the uploaded file
+        const publicUrl = await getDownloadURL(storageRef);
+        console.log("File available at", publicUrl);
+        imagePaths.push(publicUrl);
+      }
+
+      const formData = new FormData();
+
+      for (let i = 0; i < files.length; i++) {
+        formData.append("images", files[i]);
+      }
       // Check if the image format is valid
       if (!isImageValid(files)) {
         setFormatError(
@@ -73,7 +88,9 @@ const ShowPost = () => {
         return;
       }
 
-      const response = await axios.put(`/posts/update/${id}`, formData);
+      const response = await axios.put(`/posts/update/${id}`, formData, {
+        images: imagePaths,
+      });
       console.log(response.data.post);
       setPost(response.data.post);
     } catch (error) {
@@ -111,7 +128,7 @@ const ShowPost = () => {
           {/* Add new image */}
           <div className="mb-4 ml-7 dark:text-slate-200 dark:bg-gray-950">
             <label
-              htmlFor="newImage"
+              htmlFor="newImages"
               className="dark:text-slate-300 block mt-5 text-2xl"
             >
               Add new image(s) to current post
@@ -121,11 +138,11 @@ const ShowPost = () => {
               name="images"
               multiple
               accept="image/*"
-              onChange={(e) => setNewImage(e.target.files)}
+              onChange={(e) => setNewImages(e.target.files)}
               className="border-2 p-3 mt-2"
             />
             <button
-              onClick={() => handleImageUpload(newImage)}
+              onClick={() => handleImageUpload(newImages)}
               className="bg-gray-800 text-white p-4 px-6 mt-2  dark:bg-slate-300 dark:text-gray-900"
             >
               Upload
