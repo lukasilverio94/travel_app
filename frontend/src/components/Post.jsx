@@ -9,8 +9,6 @@ import axios from "axios";
 import { getStorage } from "firebase/storage";
 
 const Post = ({ post }) => {
-  console.log("Post Prop:", post);
-
   // Initialize Firebase storage instance
   const storage = getStorage();
 

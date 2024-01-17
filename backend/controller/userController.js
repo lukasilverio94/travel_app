@@ -47,7 +47,6 @@ export const signup = async (req, res) => {
 // Function for user login
 export const login = async (req, res) => {
   // Log the incoming login request data
-  console.log("Request to login:", req.body);
 
   try {
     // Find a user in the database with the provided email

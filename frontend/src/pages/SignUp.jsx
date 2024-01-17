@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -9,7 +9,7 @@ export default function SignUp() {
     email: "",
     password: "",
   });
-  const history = useHistory();
+  const navigate = useNavigate();
   const signUpUser = (e) => {
     e.preventDefault();
     if (user.email !== "" && user.password !== "" && user.userName !== "") {
@@ -18,7 +18,7 @@ export default function SignUp() {
           withCredentials: true,
         })
         .then((result) => {
-          history.push("/");
+          navigate("/");
         })
 
         .catch((err) => {

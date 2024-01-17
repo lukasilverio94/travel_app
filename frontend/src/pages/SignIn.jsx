@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const submitLogIn = (e) => {
+  const submitLogIn = async (e) => {
     e.preventDefault();
     let data = {
       email: email,
@@ -16,17 +16,19 @@ export default function SignIn() {
     };
 
     if (email !== "" && password !== "") {
-      axios
-        .post("/user/login", data)
-        .then((result) => {
-          localStorage.setItem("token", result.data);
-          // Use history.push to navigate without reloading the page
-          history.push("/");
-          toast.success("You are logged in");
-        })
-        .catch((error) => {
-          toast.error(error.response.data);
-        });
+      try {
+        const response = await axios.post("/user/login", data);
+        console.log("Login response:", response);
+
+        localStorage.setItem("token", response.data);
+        toast.success("You are logged in");
+
+        // Use navigate to navigate without reloading the page
+        window.location.href = "/";
+      } catch (error) {
+        console.error("Login error:", error);
+        toast.error(error.response.data);
+      }
     } else {
       toast.error("Email and Password are required");
     }

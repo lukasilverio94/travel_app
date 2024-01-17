@@ -5,6 +5,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 import multer from "multer";
 import app from "../config/firebase.config.js";
@@ -31,6 +32,19 @@ export const uploadImage = async (files) => {
     return imagePaths;
   } catch (error) {
     console.error("Error uploading image to Firebase:", error);
+    throw error;
+  }
+};
+
+//Delete data on firebase
+export const deleteImageFromStorage = async (imageUrl) => {
+  const storage = getStorage(app);
+  const imageRef = ref(storage, imageUrl);
+
+  try {
+    await deleteObject(imageRef);
+  } catch (error) {
+    console.error("Error deleting file from Firebase Storage:", error);
     throw error;
   }
 };

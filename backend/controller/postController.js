@@ -2,7 +2,7 @@ import Post from "../models/postModel.js";
 import Comment from "../models/commentModel.js";
 import User from "../models/userModel.js";
 import fs from "fs";
-import { uploadImage } from "./uploadController.js";
+import { uploadImage, deleteImageFromStorage } from "./uploadController.js";
 import mongoose from "mongoose";
 
 //Add New Travel
@@ -127,18 +127,15 @@ export const updateTravel = async (req, res) => {
     // retrieve the post with existing information
     updatedTravel = await Post.findById(id);
 
+    let newImages = [];
     if (req.files && req.files.length > 0) {
-      if (updatedTravel.images && updatedTravel.images.length > 0) {
-        const newImages = req.files.map((file) => file.path);
-        updatedTravel.images = [...updatedTravel.images, ...newImages];
-      } else {
-        updatedTravel.images = req.files.map((file) => file.path);
-      }
+      // Call the function to upload images to Firebase Storage
+      newImages = await uploadImage(req.files);
     }
-    // Update general travel information
+    // Update general travel information and images
     updatedTravel = await Post.findOneAndUpdate(
       { _id: id },
-      { ...req.body, images: updatedTravel.images },
+      { ...req.body, images: [...updatedTravel.images, ...newImages] },
       { new: true }
     );
 
@@ -169,7 +166,6 @@ export const deleteTravel = async (req, res) => {
 //Delete image
 export const deletePostImage = async (req, res) => {
   const { postId, filename } = req.params;
-  console.log(filename);
 
   try {
     const post = await Post.findById(postId);
@@ -177,24 +173,21 @@ export const deletePostImage = async (req, res) => {
     if (!post) {
       return res.status(404).json({ error: "No such post" });
     }
-    //find image index of the image in the post' image array
-    const imageIndex = post.images.findIndex((image) =>
-      image.includes(filename)
-    );
 
-    if (imageIndex === -1) {
+    // Find the image URL in the post's images array
+    const imageUrl = post.images.find((image) => image.includes(filename));
+
+    if (!imageUrl) {
       return res.status(404).json({ error: "Image not found" });
     }
 
-    //remove the img file from the server
-    fs.unlinkSync(
-      `C:/Users/Lucas/Documents/Matrix Master Bootcamp/MERN Projects/travel-app/backend/public/uploads/${filename}`
-    );
+    // Delete the image from Firebase Storage using the URL
+    await deleteImageFromStorage(imageUrl);
 
-    // remove the image from the post's images array
-    post.images.splice(imageIndex, 1);
+    // Remove the image URL from the post's images array
+    post.images = post.images.filter((image) => !image.includes(filename));
 
-    // save the updated post
+    // Save the updated post
     await post.save();
 
     res.status(204).end();

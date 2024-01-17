@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
-import { getDownloadURL, ref } from "firebase/storage"; // Import necessary Firebase storage functions
+import { getDownloadURL, ref } from "firebase/storage";
 
 export default function Carousel({ images, storage }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [downloadURLs, setDownloadURLs] = useState([]);
 
   useEffect(() => {
-    // Reset the current index when the images prop changes
-    setCurrentIndex(0);
-
-    // Fetch the download URLs for each image
     const fetchDownloadURLs = async () => {
-      const urls = await Promise.all(
-        images.map(async (image) => {
-          const imageRef = ref(storage, image);
-          return await getDownloadURL(imageRef);
-        })
-      );
+      if (!storage || !images || images.length === 0) {
+        return; // Return early if storage or images are not available
+      }
+
+      setCurrentIndex(0);
+
+      const urls = [];
+      for (const image of images) {
+        if (image) {
+          // Check if the image is not null or undefined
+          try {
+            const imageRef = ref(storage, image);
+            const url = await getDownloadURL(imageRef);
+            urls.push(url);
+          } catch (error) {
+            console.error(`Error fetching URL for image '${image}':`, error);
+          }
+        } else {
+          console.warn("Skipping null or undefined image in the array.");
+        }
+      }
       setDownloadURLs(urls);
     };
 

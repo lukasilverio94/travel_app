@@ -7,6 +7,15 @@ import axios from "axios";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
+//firebase
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { app } from "../config/firebase.config.js";
+
 const ShowPost = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState({});
@@ -100,17 +109,25 @@ const ShowPost = () => {
 
   const handleImageDelete = async (index) => {
     try {
-      const filename = post.images[index].slice(-24);
+      console.log("Deleting image with index:", index);
+
+      // Get the filename from the URL (it's the part after the last '/')
+      const filename = encodeURIComponent(post.images[index]);
+      console.log("Filename:", filename);
+
+      // Update the axios.delete request to include postId and filename in the URL
       await axios.delete(`/posts/images/delete/${post._id}/${filename}`);
+
+      // Update the post state to remove the deleted image
       setPost((prevPost) => ({
         ...prevPost,
         images: prevPost.images.filter((_, i) => i !== index),
       }));
+      console.log("Image deleted successfully.");
     } catch (error) {
       console.error("Error deleting image:", error);
     }
   };
-
   return (
     <div className="mx-auto p-10 mt-16  overflow-hidden dark:bg-gray-950 min-h-screen">
       <BackButton />

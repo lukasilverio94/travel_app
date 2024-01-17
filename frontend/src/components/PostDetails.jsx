@@ -82,30 +82,32 @@ const PostDetails = ({
       </div>
       {/* Render images */}
       {post.images.length > 0 && <AlertBox />}
-      {console.log(post.images)}
       {post.images && post.images.length > 0 && (
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {post.images.map((image, index) => (
-            <div key={index} className="relative">
-              {/* Display image */}
-              <img
-                src={image}
-                alt={`Image ${index + 1}`}
-                className="w-full h-full object-cover rounded-md cursor-pointer"
-                onClick={() => console.log(`Clicked on image ${index + 1}`)}
-              />
-              {/* Delete button (visible to the post owner) */}
-              {JSON.parse(localStorage.getItem("user")).username ===
-                post.writer && (
-                <button
-                  className="absolute top-2 right-2 text-2xl bg-transparent text-white px-2 py-1 rounded-md"
-                  onClick={() => handleImageDelete(index)}
-                >
-                  <IoMdClose />
-                </button>
-              )}
-            </div>
-          ))}
+          {post.images.map(
+            (image, index) =>
+              // Add a conditional check for null images
+              image && (
+                <div key={index} className="relative">
+                  <img
+                    src={image}
+                    alt={`Image ${index + 1}`}
+                    className="w-full h-full object-cover rounded-md cursor-pointer"
+                    onClick={() => console.log(`Clicked on image ${index + 1}`)}
+                  />
+                  {/* Delete button (visible to the post owner) */}
+                  {JSON.parse(localStorage.getItem("user")).username ===
+                    post.writer && (
+                    <button
+                      className="absolute top-2 right-2 text-2xl bg-transparent text-white px-2 py-1 rounded-md"
+                      onClick={() => handleImageDelete(index)}
+                    >
+                      <IoMdClose />
+                    </button>
+                  )}
+                </div>
+              )
+          )}
         </div>
       )}
       {/* End images */}

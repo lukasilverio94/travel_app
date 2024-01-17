@@ -59,7 +59,6 @@ export default function CreatePost() {
         console.log("File available at", publicUrl);
         imagePaths.push(publicUrl);
       }
-      
       const formData = new FormData();
       formData.append("title", title);
       formData.append("place", place);

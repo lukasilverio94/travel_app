@@ -5,6 +5,6 @@ export default function Logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("avatar");
-    window.location.href = "/";
+    window.location.href = "/signin";
   });
 }

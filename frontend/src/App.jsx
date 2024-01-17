@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 //Components & pages
-import Home from "./pages/Home";
 import CreatePost from "./pages/CreatePost";
 import ShowPost from "./pages/ShowPost";
 import DeletePost from "./pages/DeletePost";
@@ -63,7 +62,7 @@ function App() {
               </>
             ) : (
               <>
-                <Route exact path="/" element={<SignIn />} />
+                <Route path="/" element={<SignIn />} />
                 <Route exact path="/signin" element={<SignIn />} />
                 <Route exact path="/signUp" element={<SignUp />} />
               </>

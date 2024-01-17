@@ -82,6 +82,8 @@ const UserPanel = () => {
       console.log("Avatar url: ", avatarURL);
 
       // Update the user's avatar in the state (no need to wait for backend response)
+      updateAvatar(avatarURL); // Ensure that this is resolved before proceeding
+
       setUser((prevUser) => {
         return { ...prevUser, avatar: avatarURL };
       });
@@ -95,7 +97,6 @@ const UserPanel = () => {
       setUploading(false);
     }
   };
-
   return (
     <div className="w-full py-6 mx-auto mt-20 px-4  dark:bg-gray-950 dark:text-slate-300 leading-normal">
       <div className=" mx-auto p-6 shadow-md dark:shadow-sm dark:shadow-white rounded-md">

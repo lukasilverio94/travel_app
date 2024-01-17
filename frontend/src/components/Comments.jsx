@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import CommentList from "./CommentList";
@@ -8,12 +8,23 @@ export default function Comments({ post }) {
   const [comment, setComment] = useState({
     postId: post._id,
     commentText: "",
-    writer: JSON.parse(localStorage.getItem("user")).username,
+    writer: "",
   });
 
   const [refreshComments, setRefreshComments] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const userFromLocalStorage = localStorage.getItem("user");
+    if (userFromLocalStorage) {
+      const parsedUser = JSON.parse(userFromLocalStorage);
+      setComment((prevComment) => ({
+        ...prevComment,
+        writer: parsedUser.username,
+      }));
+    }
+  }, []);
 
   const toggleShowComment = () => {
     setShowComment((prevShowComment) => !prevShowComment);
@@ -48,8 +59,7 @@ export default function Comments({ post }) {
 
   return (
     <div className="container mb-2">
-      <form onSubmit={submitComment} className="w-full  max-w-[600px]">
-        {/* Use md:w-full to make it full width on md screens and lg:w-1/2 to make it half width on lg screens */}
+      <form onSubmit={submitComment} className="w-full max-w-[600px]">
         <input
           className="w-full border border-gray-300 mb-4 px-3 py-2 rounded dark:text-gray-950"
           type="text"
