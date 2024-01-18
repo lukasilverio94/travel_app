@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: ["https://travel-app-one-iota.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Authorization,Content-Type"],
+    allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
   })
 );
