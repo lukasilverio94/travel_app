@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 import AlertBox from "../components/AlertBox";
+//helper get user local storage
+import { getUserFromLocalStorage } from "../helper/getUserLocalStorage";
 
 const PostDetails = ({
   post,
@@ -11,6 +13,8 @@ const PostDetails = ({
   handleSave,
   handleEditMode,
 }) => {
+  const user = getUserFromLocalStorage();
+
   return (
     <div className="w-full bg-white p-6 mt-7 dark:bg-gray-950 dark:text-slate-200 leading-loose">
       <h3 className="text-teal-600 text-3xl mb-4 dark:text-white">
@@ -96,8 +100,7 @@ const PostDetails = ({
                     onClick={() => console.log(`Clicked on image ${index + 1}`)}
                   />
                   {/* Delete button (visible to the post owner) */}
-                  {JSON.parse(localStorage.getItem("user")).username ===
-                    post.writer && (
+                  {user && user.username === post.writer && (
                     <button
                       className="absolute top-2 right-2 text-2xl bg-transparent text-white px-2 py-1 rounded-md"
                       onClick={() => handleImageDelete(index)}

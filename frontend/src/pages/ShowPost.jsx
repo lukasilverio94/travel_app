@@ -6,6 +6,8 @@ import { isImageValid } from "../utils/imageFormatUtils";
 import axios from "axios";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+//helper get user from local storage fun
+import { getUserFromLocalStorage } from "../helper/getUserLocalStorage.js";
 
 //firebase
 import {
@@ -23,6 +25,7 @@ const ShowPost = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [newImages, setNewImages] = useState(null);
   const [formatError, setFormatError] = useState(null);
+  const user = getUserFromLocalStorage();
   const { id } = useParams();
 
   useEffect(() => {
@@ -131,7 +134,7 @@ const ShowPost = () => {
   return (
     <div className="mx-auto p-10 mt-16  overflow-hidden dark:bg-gray-950 min-h-screen">
       <BackButton />
-      {JSON.parse(localStorage.getItem("user")).username === post.writer ? (
+      {user?.username === post.writer ? (
         <>
           <PostDetails
             post={post}

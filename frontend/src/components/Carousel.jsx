@@ -10,24 +10,19 @@ export default function Carousel({ images, storage }) {
   useEffect(() => {
     const fetchDownloadURLs = async () => {
       if (!storage || !images || images.length === 0) {
-        return; // Return early if storage or images are not available
+        return; // return early if storage or images are not available
       }
 
       setCurrentIndex(0);
 
       const urls = [];
-      for (const image of images) {
-        if (image) {
-          // Check if the image is not null or undefined
-          try {
-            const imageRef = ref(storage, image);
-            const url = await getDownloadURL(imageRef);
-            urls.push(url);
-          } catch (error) {
-            console.error(`Error fetching URL for image '${image}':`, error);
-          }
-        } else {
-          console.warn("Skipping null or undefined image in the array.");
+      for (const image of images.filter((image) => image)) {
+        try {
+          const imageRef = ref(storage, image);
+          const url = await getDownloadURL(imageRef);
+          urls.push(url);
+        } catch (error) {
+          console.error(`Error fetching URL for image '${image}':`, error);
         }
       }
       setDownloadURLs(urls);

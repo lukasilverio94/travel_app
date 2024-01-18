@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { MdOutlineDelete, MdOutlineReply } from "react-icons/md";
+import { getUserFromLocalStorage } from "../helper/getUserLocalStorage";
 
 const CommentList = ({ post }) => {
   const [comments, setComments] = useState(post.comments);
@@ -9,6 +10,7 @@ const CommentList = ({ post }) => {
   const [isReplyMode, setIsReplyMode] = useState(false);
   const [reply, setReply] = useState({ replyText: "" });
   const [loading, setLoading] = useState(false);
+  const user = getUserFromLocalStorage();
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -24,11 +26,11 @@ const CommentList = ({ post }) => {
     fetchComments();
   }, [post._id, refresh]);
 
+  //toggle reply mode
   const handleReplyMode = () => {
     setIsReplyMode(!isReplyMode);
-    // Additional logic for handling reply mode, if needed
   };
-
+  //submit reply on comment
   const submitReply = async (e, commentId) => {
     e.preventDefault();
     setLoading(true);
@@ -36,9 +38,9 @@ const CommentList = ({ post }) => {
     try {
       const response = await axios.put(`/comments/update/${commentId}`, {
         replyText: reply.replyText,
-        writer: JSON.parse(localStorage.getItem("user")).username,
+        writer: user ? user.username : "",
       });
-      console.log(response);
+
       // Update the comment in the state with the new reply
       setComments((prevComments) => {
         const updatedComments = prevComments.map((comment) =>
@@ -71,8 +73,6 @@ const CommentList = ({ post }) => {
         console.error("Error deleting comment:", error);
       });
   };
-
-  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div>

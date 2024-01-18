@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import CommentList from "./CommentList";
+//helper function localstorage user
+import { getUserFromLocalStorage } from "../helper/getUserLocalStorage";
 
 export default function Comments({ post }) {
   const [showComment, setShowComment] = useState(false);
@@ -16,9 +18,9 @@ export default function Comments({ post }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const userFromLocalStorage = localStorage.getItem("user");
+    const userFromLocalStorage = getUserFromLocalStorage();
     if (userFromLocalStorage) {
-      const parsedUser = JSON.parse(userFromLocalStorage);
+      const parsedUser = userFromLocalStorage;
       setComment((prevComment) => ({
         ...prevComment,
         writer: parsedUser.username,

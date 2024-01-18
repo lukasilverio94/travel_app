@@ -12,6 +12,8 @@ import { isImageValid } from "../utils/imageFormatUtils.js";
 import BackButton from "../components/BackButton";
 import { toast } from "react-toastify";
 import { app } from "../config/firebase.config.js";
+//Helper function getUserLocal storage
+import { getUserFromLocalStorage } from "../helper/getUserLocalStorage.js";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
@@ -20,6 +22,7 @@ export default function CreatePost() {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const user = getUserFromLocalStorage();
   const navigate = useNavigate();
 
   // Add Post
@@ -63,14 +66,11 @@ export default function CreatePost() {
       formData.append("title", title);
       formData.append("place", place);
       formData.append("description", description);
-      formData.append(
-        "writer",
-        JSON.parse(localStorage.getItem("user")).username
-      );
-      formData.append(
-        "writerId",
-        JSON.parse(localStorage.getItem("user")).userId
-      );
+      
+      if (user) {
+        formData.append("writer", user.username);
+        formData.append("writerId", user.userId);
+      }
 
       for (let i = 0; i < files.length; i++) {
         formData.append("images", files[i]);
