@@ -32,9 +32,6 @@ app.use((error, req, res, next) => {
   console.log("This is the rejected field ->", error.field);
 });
 
-app.get("/", (req, res) => {
-  res.send("Welcome!");
-});
 //Connect db
 mongoose
   .connect(process.env.MONGO_URI)
