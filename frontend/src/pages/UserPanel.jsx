@@ -26,7 +26,7 @@ const UserPanel = () => {
       try {
         setLoading(true);
         const response = await axios.get(`/user/search/${username}`);
-        console.log("Backend Response:", response.data);
+        // console.log("Backend Response:", response.data);
 
         // Ensure that the response has the expected structure
         const userInfo = response.data.userInfo;

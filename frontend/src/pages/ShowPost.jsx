@@ -78,7 +78,6 @@ const ShowPost = () => {
 
         // Get the public URL of the uploaded file
         const publicUrl = await getDownloadURL(storageRef);
-        console.log("File available at", publicUrl);
         imagePaths.push(publicUrl);
       }
 
@@ -103,7 +102,7 @@ const ShowPost = () => {
       const response = await axios.put(`/posts/update/${id}`, formData, {
         images: imagePaths,
       });
-      console.log(response.data.post);
+
       setPost(response.data.post);
     } catch (error) {
       console.error("Error updating post with new image:", error);
@@ -112,11 +111,8 @@ const ShowPost = () => {
 
   const handleImageDelete = async (index) => {
     try {
-      console.log("Deleting image with index:", index);
-
       // Get the filename from the URL (it's the part after the last '/')
       const filename = encodeURIComponent(post.images[index]);
-      console.log("Filename:", filename);
 
       // Update the axios.delete request to include postId and filename in the URL
       await axios.delete(`/posts/images/delete/${post._id}/${filename}`);
@@ -126,7 +122,6 @@ const ShowPost = () => {
         ...prevPost,
         images: prevPost.images.filter((_, i) => i !== index),
       }));
-      console.log("Image deleted successfully.");
     } catch (error) {
       console.error("Error deleting image:", error);
     }

@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const submitLogIn = async (e) => {
     e.preventDefault();
@@ -18,7 +17,6 @@ export default function SignIn() {
     if (email !== "" && password !== "") {
       try {
         const response = await axios.post("/user/login", data);
-        console.log("Login response:", response);
 
         localStorage.setItem("token", response.data);
         toast.success("You are logged in");

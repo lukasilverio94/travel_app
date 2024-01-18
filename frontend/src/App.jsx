@@ -24,7 +24,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Default axios
-axios.defaults.baseURL = "https://ontheroad-travel-app.vercel.app";
+axios.defaults.baseURL = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 axios.defaults.withCredentials = true;
 
 function App() {
