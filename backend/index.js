@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["https://travel-app-frontend-rose.vercel.app"],
+    origin: ["https://travel-app-client-rho.vercel.app"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
