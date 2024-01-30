@@ -59,14 +59,14 @@ export default function CreatePost() {
 
         // Get the public URL of the uploaded file
         const publicUrl = await getDownloadURL(storageRef);
-        console.log("File available at", publicUrl);
+
         imagePaths.push(publicUrl);
       }
       const formData = new FormData();
       formData.append("title", title);
       formData.append("place", place);
       formData.append("description", description);
-      
+
       if (user) {
         formData.append("writer", user.username);
         formData.append("writerId", user.userId);

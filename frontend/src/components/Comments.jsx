@@ -6,6 +6,7 @@ import CommentList from "./CommentList";
 import { getUserFromLocalStorage } from "../helper/getUserLocalStorage";
 
 export default function Comments({ post }) {
+  const user = getUserFromLocalStorage();
   const [showComment, setShowComment] = useState(false);
   const [comment, setComment] = useState({
     postId: post._id,
